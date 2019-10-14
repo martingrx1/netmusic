@@ -1,23 +1,59 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
 
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: Home
+  routes: [{
+      path: '*',
+      redirect: '/find'
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      path: '/find',
+      name: 'findRouter',
+      component: () => import('./views/Find')
+    },
+
+    {
+      path: '/mine',
+      name: 'mineRouter',
+      component: () => import('./views/Mine'),
+      children: [{
+        path: '/mine',
+        redirect: '/mine/plv'
+      }, {
+        path: 'pld',
+        name: 'pldRouter',
+        component: () => import('./components/PlaylistDetail'),
+        meta: {
+          requireAuth: true
+        }
+      }, {
+        path: 'plv',
+        name: 'plvRouter',
+        component: () => import('./components/PlaylistView'),
+        meta: {
+          requireAuth: true
+        }
+      }],
+    }, 
+
+    {
+      path: '/video',
+      name: 'videoRouter',
+      component: () => import('./views/Video')
+    }, {
+      path: '/search',
+      name: 'searchRouter',
+      component: () => import('./components/SearchPage')
+    }, {
+      path: '/player',
+      name: 'playerRouter',
+      component: () => import('./components/Player')
+    }, {
+      path: '/account',
+      name: 'accountRouter',
+      component: () => import('./views/Account')
     }
   ]
 })
